@@ -2,10 +2,10 @@ import { SignIn } from "@clerk/nextjs";
 
 export default function Page() {
   return (
-    <section className="bg-white">
+    <section className="bg-white max-w-5xl mx-auto">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
         {/* Left side - Image */}
-        <section className="relative flex items-end bg-gray-100 lg:col-span-5 lg:h-full xl:col-span-6">
+        <section className="relative flex items-center bg-gray-100 lg:col-span-5 lg:h-full xl:col-span-6">
           <img
             alt="Sign in background"
             src="https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80"

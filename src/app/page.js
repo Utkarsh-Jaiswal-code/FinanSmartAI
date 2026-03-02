@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Header from "./_components/Header";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -16,7 +17,7 @@ export default function Home() {
         </p>
         <div className="mt-6 flex gap-4">
           <button className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-semibold hover:opacity-90">
-            Get Started
+             <Link href="/sign-in">Get Started</Link>
           </button>
           <button className="px-6 py-3 rounded-full border border-gray-300 dark:border-gray-600 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800">
             Learn More

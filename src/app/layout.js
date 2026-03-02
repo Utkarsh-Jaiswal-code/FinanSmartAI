@@ -40,8 +40,8 @@ export default function RootLayout({ children }) {
           </header>
 
           {/* Main content */}
-          <main className="flex-1 flex items-center justify-center p-6 animate-fade-up">
-            <div className="w-full max-w-5xl bg-card rounded-2xl shadow-card p-8">
+          <main className="flex-1 flex items-center justify-center  animate-fade-up">
+            <div className="w-full  bg-card rounded-2xl shadow-card p-8">
               {children}
             </div>
           </main>

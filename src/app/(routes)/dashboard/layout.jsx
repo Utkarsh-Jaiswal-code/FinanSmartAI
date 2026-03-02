@@ -1,11 +1,10 @@
-"use client";
+"use client"
+
 import React, { useEffect } from "react";
+import Image from "next/image";
 import SideNav from "./_components/SideNav";
 import DashboardHeader from "./_components/DashboardHeader";
-import { db } from "@/utils/dbConfig";
-import { Budgets } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
-import { eq } from "drizzle-orm";
 import { useRouter } from "next/navigation";
 
 function DashboardLayout({ children }) {
@@ -17,34 +16,36 @@ function DashboardLayout({ children }) {
   }, [user]);
 
   const checkUserBudgets = async () => {
-    const result = await db
-      .select()
-      .from(Budgets)
-      .where(eq(Budgets.createdBy, user?.primaryEmailAddress?.emailAddress));
-    if (result?.length === 0) {
-      router.replace("/dashboard/budgets");
+    try {
+      const email = user?.primaryEmailAddress?.emailAddress;
+      if (!email) return;
+      const res = await fetch(`/api/budgets?email=${encodeURIComponent(email)}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data || data.length === 0) router.replace("/dashboard/budgets");
+    } catch (err) {
+      console.error("Error checking user budgets:", err);
     }
   };
 
   return (
-    <div className="flex bg-gray-50 min-h-screen">
-      {/* Sidebar */}
-      <aside className="hidden md:flex md:flex-col fixed inset-y-0 w-64 bg-white shadow-lg border-r border-gray-200">
-        <div className="h-16 flex items-center justify-center font-extrabold text-xl text-blue-700 tracking-wide border-b">
-          FinanSmartAI
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
+        <div className="flex flex-col lg:flex-row pt-6">
+          {/* Sidebar */}
+          <aside className="">
+            <div className="bg-white rounded-lg shadow-sm border p-4 sticky top-20">
+              <SideNav />
+            </div>
+          </aside>
+
+          {/* Main content area */}
+          <section className="flex-1">
+            <div className="bg-white rounded-2xl shadow p-6">
+              {children}
+            </div>
+          </section>
         </div>
-        <SideNav />
-      </aside>
-
-      {/* Main content */}
-      <div className="flex-1 md:ml-64 flex flex-col">
-        {/* Header */}
-        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b shadow-sm">
-          <DashboardHeader />
-        </header>
-
-        {/* Content */}
-        <main className="flex-1 p-6 lg:p-10 overflow-y-auto">{children}</main>
       </div>
     </div>
   );

@@ -1,15 +1,18 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
+import { Button } from "../../components/ui/Button";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 function Header() {
   const { isLoaded } = useUser(); // prevents hydration flicker
+  const pathname = usePathname();
+  const isDashboard = pathname?.startsWith("/dashboard");
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b shadow-md bg-white/70 dark:bg-gray-900/70 backdrop-blur-md">
+    <header className="sticky max-w-5xl mx-auto pt-4 top-0 z-50 w-full border-b shadow-md bg-white/70 dark:bg-gray-900/70 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
@@ -20,9 +23,11 @@ function Header() {
             height={40}
             className="transition-transform group-hover:rotate-6"
           />
-          <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
-            FinanSmartAI
-          </span>
+          {!isDashboard && (
+            <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
+              FinanSmartAI
+            </span>
+          )}
         </Link>
 
         {/* Right side */}
