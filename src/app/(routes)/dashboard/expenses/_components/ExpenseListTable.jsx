@@ -1,8 +1,10 @@
 import React from "react";
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
+import { useCurrency } from "../../../../components/CurrencyProvider";
 
 function ExpenseListTable({ expensesList, refreshData }) {
+  const { formatCurrency } = useCurrency();
   const deleteExpense = async (expense) => {
     try {
       const res = await fetch(`/api/expenses?id=${expense.id}`, {
@@ -28,7 +30,7 @@ function ExpenseListTable({ expensesList, refreshData }) {
       {expensesList.map((expenses, index) => (
         <div className="grid grid-cols-4 bg-slate-50 rounded-bl-xl rounded-br-xl p-2">
           <h2>{expenses.name}</h2>
-          <h2>{expenses.amount}</h2>
+          <h2>{formatCurrency(expenses.amount)}</h2>
           <h2>{expenses.createdAt}</h2>
           <h2
             onClick={() => deleteExpense(expenses)}

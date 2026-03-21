@@ -1,8 +1,10 @@
 
 import Link from "next/link";
 import React from "react";
+import { useCurrency } from "../../../../components/CurrencyProvider";
 
 function BudgetItem({ budget }) {
+  const { formatCurrency } = useCurrency();
   const calculateProgressPerc = () => {
     const perc = (budget.totalSpend / budget.amount) * 100;
     return perc > 100 ? 100 : perc.toFixed(2);
@@ -27,7 +29,7 @@ function BudgetItem({ budget }) {
               <h2 className="text-sm text-gray-500">{budget.totalItem} Item</h2>
             </div>
           </div>
-          <h2 className="font-bold text-primary text-lg"> ${budget.amount}</h2>
+          <h2 className="font-bold text-primary text-lg">{formatCurrency(budget.amount)}</h2>
         </div>
 
         <div className="mt-5">

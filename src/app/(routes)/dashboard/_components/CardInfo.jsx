@@ -4,14 +4,15 @@ import {
     CircleDollarSign,
 } from "lucide-react";
 
-import formatNumber from "../../../../../utils";
 import getFinancialAdvice from "../../../../../utils/getFinancialAdvice";
 import { useEffect, useState } from "react";
+import { useCurrency } from "../../../components/CurrencyProvider";
 function CardInfo({ budgetList, incomeList }) {
     const [totalBudget, settotalBudget] = useState(0);
     const [totalSpend, settotalSpend] = useState(0);
     const [totalIncome, settotalIncome] = useState(0);
     const [financialAdvice, setfinancialAdvice] = useState("");
+    const { formatCurrency } = useCurrency();
 
     useEffect(() => {
         if ((budgetList && budgetList.length > 0) || (incomeList && incomeList.length > 0)) {
@@ -52,7 +53,7 @@ function CardInfo({ budgetList, incomeList }) {
 
         if (Array.isArray(incomeList)) {
             incomeList.forEach((element) => {
-                totalIncome_ += Number(element?.totalAmount || 0);
+                totalIncome_ += Number(element?.amount || 0);
             });
         }
 
@@ -81,7 +82,7 @@ function CardInfo({ budgetList, incomeList }) {
                         <div className="p-6 border rounded-xl flex items-center justify-between">
                             <div>
                                 <h2 className="text-sm">Total Budget</h2>
-                                <h2 className="font-bold text-2xl "> ${formatNumber(totalBudget)}</h2>
+                                <h2 className="font-bold text-2xl ">{formatCurrency(totalBudget)}</h2>
                             </div>
                             <PiggyBank className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
                         </div>
@@ -92,7 +93,7 @@ function CardInfo({ budgetList, incomeList }) {
                         <div className="p-6 border rounded-xl flex items-center justify-between">
                             <div>
                                 <h2 className="text-sm">Total Spend</h2>
-                                <h2 className="font-bold text-2xl "> ${formatNumber(totalSpend)}</h2>
+                                <h2 className="font-bold text-2xl ">{formatCurrency(totalSpend)}</h2>
                             </div>
                             <ReceiptText className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
                         </div>
@@ -115,7 +116,7 @@ function CardInfo({ budgetList, incomeList }) {
                         <div className="p-6 border rounded-xl flex items-center justify-between">
                             <div>
                                 <h2 className="text-sm">Sum of Income Streams</h2>
-                                <h2 className="font-bold text-2xl "> ${formatNumber(totalIncome)}</h2>
+                                <h2 className="font-bold text-2xl ">{formatCurrency(totalIncome)}</h2>
                             </div>
                             <CircleDollarSign className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
                         </div>

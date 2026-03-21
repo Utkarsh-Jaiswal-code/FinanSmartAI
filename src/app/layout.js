@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { CurrencyProvider } from "./components/CurrencyProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +20,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-primary-dark via-background to-secondary-dark text-foreground`}
-      >
+    <CurrencyProvider>
+      <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
+        <html lang="en">
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-primary-dark via-background to-secondary-dark text-foreground`}
+          >
        
         {/* Page wrapper */}
         <div className="min-h-screen flex flex-col">
@@ -55,5 +57,6 @@ export default function RootLayout({ children }) {
       </body>
     </html>
     </ClerkProvider>
+    </CurrencyProvider>
   );
 }

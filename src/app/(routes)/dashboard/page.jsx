@@ -4,7 +4,8 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import CardInfo from "./_components/CardInfo";
 import BarChartDashboard from "./_components/BarChartDashboard";
 import BudgetItem from "./budgets/_components/BudgetItem";
-// import ExpenseListTable from "./expenses/_components/ExpenseListTable";
+import ExpenseListTable from "./expenses/_components/ExpenseListTable";
+import CurrencySelector from "../../components/CurrencySelector";
 
 function Dashboard() {
   const { user } = useUser();
@@ -79,7 +80,10 @@ function Dashboard() {
             Here’s a quick summary of your budgets, spending and income.
           </p>
         </div>
-        <UserButton afterSignOutUrl="/" />
+        <div className="flex items-center gap-4">
+          <CurrencySelector />
+          <UserButton afterSignOutUrl="/" />
+        </div>
       </div>
 
       {/* Top Summary Cards */}
@@ -98,7 +102,14 @@ function Dashboard() {
           {/* Expenses Table */}
           <div className="bg-white rounded-xl shadow p-6">
             <h2 className="font-semibold text-lg mb-4">Recent Expenses</h2>
-            <div className="text-sm text-gray-500">No recent expenses to display.</div>
+            {expensesList.length > 0 ? (
+              <ExpenseListTable
+                expensesList={expensesList}
+                refreshData={getAllExpenses}
+              />
+            ) : (
+              <div className="text-sm text-gray-500">No recent expenses to display.</div>
+            )}
           </div>
         </div>
 
