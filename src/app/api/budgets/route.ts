@@ -14,7 +14,7 @@ export async function GET(req: Request) {
       console.log('[budgets GET] email=', email);
     }
 
-    let query = db
+    const baseQuery = db
       .select({
         ...getTableColumns(Budgets),
         totalSpend: sql`sum(${Expenses.amount})`.mapWith(Number),
@@ -23,11 +23,11 @@ export async function GET(req: Request) {
       .from(Budgets)
       .leftJoin(Expenses, eq(Budgets.id, Expenses.budgetId));
 
-    if (email) {
-      query = query.where(eq(Budgets.createdBy, email));
-    }
+    const filteredQuery = email
+      ? baseQuery.where(eq(Budgets.createdBy, email))
+      : baseQuery;
 
-    const result = await query.groupBy(Budgets.id).orderBy(desc(Budgets.id));
+    const result = await filteredQuery.groupBy(Budgets.id).orderBy(desc(Budgets.id));
 
     return NextResponse.json(result);
   } catch (err) {
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     const createdBy = email || 'unknown';
     const result = await db
       .insert(Budgets)
-      .values({ name, amount, icon, createdBy })
+      .values({ name, amount, icon, createdBy } as any)
       .returning({ id: Budgets.id });
     console.log("[budgets POST] insert result=", result);
     return NextResponse.json(result);
