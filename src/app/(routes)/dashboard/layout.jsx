@@ -2,8 +2,8 @@
 
 import React, { useEffect } from "react";
 import Image from "next/image";
-import SideNav from "./_components/SideNav";
-import DashboardHeader from "./_components/DashboardHeader";
+import SideNav from "@/app/(routes)/dashboard/_components/SideNav";
+import DashboardHeader from "@/app/(routes)/dashboard/_components/DashboardHeader";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 

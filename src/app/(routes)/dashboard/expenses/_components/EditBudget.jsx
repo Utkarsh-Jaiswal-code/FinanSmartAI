@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "../../../../../components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { PenBox } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import {
@@ -11,10 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../../../components/ui/dialog";
+} from "@/components/ui/dialog";
 import EmojiPicker from "emoji-picker-react";
 import { useUser } from "@clerk/nextjs";
-import { Input } from "../../../../../components/ui/input";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 function EditBudget({ budgetInfo, refreshData }) {
   const [emojiIcon, setEmojiIcon] = useState(budgetInfo?.icon);

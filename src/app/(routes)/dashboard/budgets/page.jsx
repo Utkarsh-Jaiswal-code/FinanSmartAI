@@ -1,5 +1,5 @@
 import React from 'react'
-import BudgetList from './_components/BudgetList'
+import BudgetList from '@/app/(routes)/dashboard/budgets/_components/BudgetList'
 
 function Budget() {
   return (

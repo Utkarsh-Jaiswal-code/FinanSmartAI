@@ -1,9 +1,9 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import CreateBudget from './CreateBudget'
-import { Budgets, Expenses } from '../../../../../../utils/schema'
+import CreateBudget from '@/app/(routes)/dashboard/budgets/_components/CreateBudget'
+import { Budgets, Expenses } from '@/utils/schema'
 import { useUser } from '@clerk/nextjs'
-import BudgetItem from './BudgetItem'
+import BudgetItem from '@/app/(routes)/dashboard/budgets/_components/BudgetItem'
 
 function BudgetList() {
   const [budgetList, setBudgetList] = useState([]);

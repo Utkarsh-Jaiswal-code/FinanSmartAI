@@ -1,7 +1,7 @@
 
 import Link from "next/link";
 import React from "react";
-import { useCurrency } from "../../../../components/CurrencyProvider";
+import { useCurrency } from "@/app/components/CurrencyProvider";
 
 function BudgetItem({ budget }) {
   const { formatCurrency } = useCurrency();

@@ -4,14 +4,15 @@ import {
     CircleDollarSign,
 } from "lucide-react";
 
-import getFinancialAdvice from "../../../../../utils/getFinancialAdvice";
+import getFinancialAdvice from "@/utils/getFinancialAdvice";
 import { useEffect, useState } from "react";
-import { useCurrency } from "../../../components/CurrencyProvider";
+import { useCurrency } from "@/app/components/CurrencyProvider";
 function CardInfo({ budgetList, incomeList }) {
     const [totalBudget, settotalBudget] = useState(0);
     const [totalSpend, settotalSpend] = useState(0);
     const [totalIncome, settotalIncome] = useState(0);
     const [financialAdvice, setfinancialAdvice] = useState("");
+    const [forecastData, setForecastData] = useState(null);
     const { formatCurrency } = useCurrency();
 
     useEffect(() => {
@@ -29,8 +30,9 @@ function CardInfo({ budgetList, incomeList }) {
         if (totalBudget > 0 || totalIncome > 0 || totalSpend > 0) {
             const fetchFinancialAdvice = async () => {
                 try {
-                    const advice = await getFinancialAdvice(totalBudget, totalIncome, totalSpend);
-                    setfinancialAdvice(advice);
+                    const result = await getFinancialAdvice(totalBudget, totalIncome, totalSpend);
+                    setfinancialAdvice(result?.advice || "No financial advice available.");
+                    setForecastData(result?.forecast || null);
                 } catch (err) {
                     console.error("Error fetching financial advice:", err);
                 }
@@ -71,14 +73,24 @@ function CardInfo({ budgetList, incomeList }) {
                         <div>
                             <div className="flex mb-2 flex-row space-x-2 items-center">
                                 <h2 className="text-xl font-semibold">Overview</h2>
-                                <Sparkles className="rounded-full text-white w-10 h-10 p-2" />
+                                <Sparkles className="rounded-full text-black w-10 h-10 p-2" />
                             </div>
                             <h2 className="font-light text-md">
                                 {financialAdvice && financialAdvice.length > 0 ? financialAdvice : "No financial advice available yet."}
                             </h2>
+                            {forecastData && (
+                                <div className="mt-4 p-4 bg-slate-50 border rounded">
+                                    <p className="text-sm font-medium">AI Budget Forecast</p>
+                                    <p>Next month spend: {formatCurrency(forecastData.predictedSpend)}</p>
+                                    <p>Next month savings: {formatCurrency(forecastData.predictedSavings)}</p>
+                                    <p className="capitalize">Risk: {forecastData.riskLevel}</p>
+                                    <p className="text-xs text-gray-600">{forecastData.summary}</p>
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
+                    {/* <div className="grid grid-cols-2 gap-2"> */}
+                    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
                         <div className="p-6 border rounded-xl flex items-center justify-between">
                             <div>
                                 <h2 className="text-sm">Total Budget</h2>
@@ -87,9 +99,6 @@ function CardInfo({ budgetList, incomeList }) {
                             <PiggyBank className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
                         </div>
 
-                    </div>
-
-                    <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div className="p-6 border rounded-xl flex items-center justify-between">
                             <div>
                                 <h2 className="text-sm">Total Spend</h2>
@@ -98,10 +107,6 @@ function CardInfo({ budgetList, incomeList }) {
                             <ReceiptText className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
                         </div>
 
-                    </div>
-
-
-                    <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div className="p-6 border rounded-xl flex items-center justify-between">
                             <div>
                                 <h2 className="text-sm">Number of Budgets</h2>
@@ -110,9 +115,6 @@ function CardInfo({ budgetList, incomeList }) {
                             <Wallet className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
                         </div>
 
-                    </div>
-
-                    <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div className="p-6 border rounded-xl flex items-center justify-between">
                             <div>
                                 <h2 className="text-sm">Sum of Income Streams</h2>
@@ -120,11 +122,7 @@ function CardInfo({ budgetList, incomeList }) {
                             </div>
                             <CircleDollarSign className="bg-blue-800 p-3 h-12 w-12 rounded-full text-white" />
                         </div>
-
                     </div>
-
-
-
                 </div>
             ) : (
                 <div className="mt-7">
@@ -139,8 +137,9 @@ function CardInfo({ budgetList, incomeList }) {
                     </div>
                 </div>
             )}
-        </div >
+        </div>
     )
 }
+
 
 export default CardInfo;

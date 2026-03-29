@@ -1,7 +1,7 @@
 import React from "react";
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
-import { useCurrency } from "../../../../components/CurrencyProvider";
+import { useCurrency } from "@/app/components/CurrencyProvider";
 
 function ExpenseListTable({ expensesList, refreshData }) {
   const { formatCurrency } = useCurrency();

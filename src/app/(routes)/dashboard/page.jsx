@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
-import CardInfo from "./_components/CardInfo";
-import BarChartDashboard from "./_components/BarChartDashboard";
-import BudgetItem from "./budgets/_components/BudgetItem";
-import ExpenseListTable from "./expenses/_components/ExpenseListTable";
-import CurrencySelector from "../../components/CurrencySelector";
+import CardInfo from "@/app/(routes)/dashboard/_components/CardInfo";
+import BarChartDashboard from "@/app/(routes)/dashboard/_components/BarChartDashboard";
+import BudgetItem from "@/app/(routes)/dashboard/budgets/_components/BudgetItem";
+import ExpenseListTable from "@/app/(routes)/dashboard/expenses/_components/ExpenseListTable";
+import CurrencySelector from "@/app/components/CurrencySelector";
 
 function Dashboard() {
   const { user } = useUser();

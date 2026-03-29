@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import formatNumber from '../../../utils/index';
+import formatNumber from '@/utils/index';
 
 const CurrencyContext = createContext();
 

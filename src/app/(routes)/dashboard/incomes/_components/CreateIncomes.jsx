@@ -9,10 +9,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../../../../src/components/ui/dialog";
+} from "@/components/ui/dialog";
 import EmojiPicker from "emoji-picker-react";
-import { Button } from "../../../../../../src/components/ui/Button";
-import { Input } from "../../../../../../src/components/ui/input";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/input";
 // database interactions are handled via server API routes
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";

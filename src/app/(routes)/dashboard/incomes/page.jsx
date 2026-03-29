@@ -1,5 +1,5 @@
 import React from "react";
-import IncomeList from "./_components/IncomeList";
+import IncomeList from "@/app/(routes)/dashboard/incomes/_components/IncomeList";
 
 function Income() {
   return (

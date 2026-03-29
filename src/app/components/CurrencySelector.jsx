@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useCurrency } from './CurrencyProvider';
+import { useCurrency } from '@/app/components/CurrencyProvider';
 
 const CurrencySelector = () => {
   const { currency, setCurrency } = useCurrency();

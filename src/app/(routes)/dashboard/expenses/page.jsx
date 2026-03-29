@@ -1,7 +1,7 @@
 
 "use client"
 import React, { useEffect, useState } from 'react'
-import ExpenseListTable from './_components/ExpenseListTable';
+import ExpenseListTable from '@/app/(routes)/dashboard/expenses/_components/ExpenseListTable';
 import { useUser } from '@clerk/nextjs';
 
 function ExpensesScreen() {

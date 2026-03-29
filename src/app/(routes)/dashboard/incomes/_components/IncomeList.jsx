@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CreateIncomes from "./CreateIncomes";
+import CreateIncomes from "@/app/(routes)/dashboard/incomes/_components/CreateIncomes";
 import { useUser } from "@clerk/nextjs";
-import IncomeItem from "./IncomeItem";
+import IncomeItem from "@/app/(routes)/dashboard/incomes/_components/IncomeItem";
 
 function IncomeList() {
   const [incomelist, setIncomelist] = useState([]);
