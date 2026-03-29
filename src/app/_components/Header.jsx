@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Button } from "../../components/ui/Button";
+import { Button } from "../../components/ui/button";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 

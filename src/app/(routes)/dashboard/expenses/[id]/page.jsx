@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import BudgetItem from "@/app/(routes)/dashboard/budgets/_components/BudgetItem";
 import AddExpense from "@/app/(routes)/dashboard/expenses/_components/AddExpense";
 import ExpenseListTable from "@/app/(routes)/dashboard/expenses/_components/ExpenseListTable";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, Pen, PenBox, Trash } from "lucide-react";
 import {
   AlertDialog,
