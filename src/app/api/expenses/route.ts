@@ -51,7 +51,7 @@ export async function POST(req: Request) {
         amount,
         budgetId: Number(budgetId),
         createdAt: new Date().toISOString(),
-      })
+      } as any)
       .returning({ id: Expenses.id });
 
     return NextResponse.json(result);
