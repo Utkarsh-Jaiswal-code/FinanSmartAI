@@ -1,7 +1,6 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { authMiddleware } from "@clerk/nextjs";
 
-export default clerkMiddleware({
-  // pages that anyone can access
+export default authMiddleware({
   publicRoutes: ["/", "/sign-in", "/sign-up"],
 });
 
