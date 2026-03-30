@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "AIzaSyDESMRtHxJgxFfHZ_l8i7a7C_qfrl-KJs0");
-
 export async function POST(req: Request) {
   try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.error("Missing Gemini API Key");
+      return NextResponse.json({ error: "Missing Gemini API Key" }, { status: 500 });
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+
     const { description } = await req.json();
     if (!description) {
       return NextResponse.json({ error: "Missing description" }, { status: 400 });
