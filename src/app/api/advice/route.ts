@@ -16,6 +16,18 @@ export async function POST(req: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
+    if (totalIncome <= 0) {
+      const advice =
+        "Income is not available yet — add at least one income source so we can give accurate guidance.";
+      const forecast = {
+        predictedSpend: Number(totalSpend) * 1.05,
+        predictedSavings: 0,
+        riskLevel: totalSpend > 0 ? "high" : "low",
+        summary: "Income is missing, so this is a fallback forecast.",
+      };
+      return NextResponse.json({ advice, forecast });
+    }
+
     if (!apiKey) {
       console.error("Missing Gemini API Key");
       return NextResponse.json(

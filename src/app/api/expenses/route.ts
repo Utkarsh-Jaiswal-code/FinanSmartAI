@@ -23,6 +23,7 @@ export async function GET(req: Request) {
           name: Expenses.name,
           amount: Expenses.amount,
           createdAt: Expenses.createdAt,
+          category: Expenses.category,
         })
         .from(Budgets)
         .rightJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
@@ -40,10 +41,12 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const { name, amount, budgetId } = await req.json();
+    const { name, amount, budgetId, category } = await req.json();
     if (!name || !amount || !budgetId) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
+    const expenseCategory = category?.trim() || "Other";
+
     const result = await db
       .insert(Expenses)
       .values({
@@ -51,6 +54,7 @@ export async function POST(req: Request) {
         amount,
         budgetId: Number(budgetId),
         createdAt: new Date().toISOString(),
+        category: expenseCategory,
       } as any)
       .returning({ id: Expenses.id });
 
