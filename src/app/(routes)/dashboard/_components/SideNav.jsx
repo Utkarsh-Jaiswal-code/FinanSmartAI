@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import {
+    Home,
     LayoutGrid,
     PiggyBank,
     ReceiptText,
@@ -14,6 +15,12 @@ import Link from "next/link";
 
 function SideNav() {
     const menuList = [
+        {
+            id: 0,
+            name: "Home",
+            icon: Home,
+            path: "/"
+        },
         {
             id: 1,
             name: "Dashboard",

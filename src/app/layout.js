@@ -35,9 +35,9 @@ export default function RootLayout({ children }) {
               FinanSmartAI
             </h1>
             <nav className="space-x-6 text-sm font-medium">
-              <a href="#" className="hover:text-primary transition-colors">Home</a>
+              <a href="/" className="hover:text-primary transition-colors">Home</a>
               <a href="#" className="hover:text-primary transition-colors">Services</a>
-              <a href="#" className="hover:text-primary transition-colors">About</a>
+              <a href="/about" className="hover:text-primary transition-colors">About</a>
             </nav>
           </header>
 

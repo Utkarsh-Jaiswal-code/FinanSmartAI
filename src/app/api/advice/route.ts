@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(req: Request) {
   try {
@@ -16,11 +17,20 @@ export async function POST(req: Request) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
+      console.error("Missing Gemini API Key");
       return NextResponse.json(
         { error: "Missing Gemini API Key" },
         { status: 500 }
       );
     }
+
+    console.log("API Key loaded, length:", apiKey.length);
+
+    // ✅ Initialize Gemini AI
+    const genAI = new GoogleGenerativeAI(apiKey);
+
+    // ✅ Use the correct available model
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     // ✅ Strong structured prompt
     const userPrompt = `
@@ -43,74 +53,27 @@ Instructions:
 
     console.log("Prompt sent to Gemini:\n", userPrompt);
 
-    const payload = {
-      prompt: { text: userPrompt },
-      maxOutputTokens: 200,
-      temperature: 0.7,
-    };
+    // ✅ Generate content with Gemini
+    const result = await model.generateContent(userPrompt);
+    const response = await result.response;
+    const advice = response.text().trim();
 
-    console.log("Gemini request payload", JSON.stringify(payload, null, 2));
+    console.log("Gemini Response:", advice);
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.5-mini:generate?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Gemini API Error:", response.status, errorText);
-
-      return NextResponse.json({
-        advice: getFallbackAdvice(totalIncome, totalSpend, savings),
-      });
-    }
-
-    const data = await response.json();
-
-    // ✅ Log Gemini response for debugging
-    console.log("Gemini status", response.status);
-    console.log("Gemini raw response", JSON.stringify(data, null, 2));
-
-    const candidate = data?.candidates?.[0];
-    const parsedAdvice =
-      candidate?.content?.[0]?.text?.trim() ||
-      candidate?.output?.[0]?.content?.trim() ||
-      candidate?.content?.trim();
-
-    // Try parse structured response in case Gemini already responded JSON.
-    let structured = null;
-    try {
-      structured = parsedAdvice ? JSON.parse(parsedAdvice) : null;
-    } catch (err) {
-      // console.warn("Gemini output not JSON, using plain text.", err);
-    }
-
-    const advice =
-      structured?.advice ||
-      parsedAdvice ||
-      getFallbackAdvice(totalIncome, totalSpend, savings);
-
+    // ✅ Default forecast (fallback)
     const defaultForecast = {
       predictedSpend: Number(totalSpend) * 1.05,
       predictedSavings: Math.max(Number(totalIncome) - Number(totalSpend), 0),
       riskLevel: totalSpend > totalIncome ? "high" : "moderate",
     };
 
+    // For now, return simple forecast since we're focusing on advice
     const forecast = {
-      predictedSpend: Number(structured?.predictedSpend) || defaultForecast.predictedSpend,
-      predictedSavings: Number(structured?.predictedSavings) || defaultForecast.predictedSavings,
-      riskLevel: structured?.riskLevel || defaultForecast.riskLevel,
-      summary: structured?.forecastSummary || "Forecast generated from current budget trends.",
+      predictedSpend: defaultForecast.predictedSpend,
+      predictedSavings: defaultForecast.predictedSavings,
+      riskLevel: defaultForecast.riskLevel,
+      summary: "Forecast generated from current budget trends.",
     };
-
-    console.log("Extracted Gemini advice", advice);
-    console.log("Forecast result", forecast);
 
     return NextResponse.json({ advice, forecast });
   } catch (error) {
@@ -121,21 +84,4 @@ Instructions:
         "Track your expenses carefully and ensure you save a portion of your income every month.",
     });
   }
-}
-
-// ✅ Fallback (important for stability)
-function getFallbackAdvice(income: number, spend: number, savings: number) {
-  if (income === 0) {
-    return "You currently have no income, so focus on building a stable income source. Avoid unnecessary expenses.";
-  }
-
-  if (spend > income) {
-    return "You are spending more than you earn. Cut unnecessary expenses and follow a strict budget.";
-  }
-
-  if (savings < income * 0.2) {
-    return "Your savings are low. Try to save at least 20% of your income.";
-  }
-
-  return "You are managing your finances well. Continue saving and consider investing for growth.";
 }

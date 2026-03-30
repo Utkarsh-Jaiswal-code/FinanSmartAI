@@ -1,16 +1,43 @@
-import fetch from 'node-fetch';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-(async () => {
-  const url = 'https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.5-mini:generate?key=AIzaSyCf9fn_HQqDzAdLGaxMc9XKSEVIkXy5Viw';
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'AIzaSyDESMRtHxJgxFfHZ_l8i7a7C_qfrl-KJs0');
+
+async function testFinancialAdvice() {
   try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: { text: 'hi' }, maxOutputTokens: 10 }),
-    });
-    console.log('status', res.status);
-    console.log(await res.text());
-  } catch (err) {
-    console.error(err);
+    console.log('Testing financial advice generation...');
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+    const userPrompt = `
+You are a financial advisor.
+
+User Financial Data:
+- Budget: 5000
+- Income: 100000
+- Expenses: 2000
+- Savings: 98000
+
+Condition:
+User is saving money.
+
+Instructions:
+- Use the numbers
+- Be specific and practical
+- Give exactly 2 short sentences
+`;
+
+    console.log('Sending prompt to Gemini...');
+    const result = await model.generateContent(userPrompt);
+    const response = await result.response;
+    const advice = response.text().trim();
+
+    console.log('Gemini Advice Response:');
+    console.log(advice);
+    console.log('Response length:', advice.length);
+
+  } catch (error) {
+    console.error('Error generating advice:', error);
   }
-})();
+}
+
+testFinancialAdvice();
