@@ -33,7 +33,7 @@ function ExpenseListTable({ expensesList, refreshData }) {
           <h2>{expenses.name}</h2>
           <h2>{formatCurrency(expenses.amount)}</h2>
           <h2>{expenses.category || "Uncategorized"}</h2>
-          <h2>{expenses.createdAt}</h2>
+          <h2>{new Date(expenses.createdAt).toLocaleString()}</h2>
           <h2
             onClick={() => deleteExpense(expenses)}
             className="text-red-500 cursor-pointer"

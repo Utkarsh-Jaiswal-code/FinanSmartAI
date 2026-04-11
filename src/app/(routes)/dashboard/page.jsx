@@ -89,32 +89,29 @@ function Dashboard() {
       {/* Top Summary Cards */}
       <CardInfo budgetList={budgetList} incomeList={incomeList} />
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-        {/* Left side: Chart + Expenses */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Chart */}
-          <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="font-semibold text-lg mb-4">Spending Overview</h2>
-            <BarChartDashboard budgetList={budgetList} />
-          </div>
-
-          {/* Expenses Table */}
-          <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="font-semibold text-lg mb-4">Recent Expenses</h2>
-            {expensesList.length > 0 ? (
-              <ExpenseListTable
-                expensesList={expensesList}
-                refreshData={getAllExpenses}
-              />
-            ) : (
-              <div className="text-sm text-gray-500">No recent expenses to display.</div>
-            )}
-          </div>
+      {/* Main Column */}
+      <div className="flex flex-col gap-6 mt-8 w-full">
+        {/* Chart */}
+        <div className="bg-white rounded-xl shadow p-6 w-full">
+          <h2 className="font-semibold text-lg mb-4">Spending Overview</h2>
+          <BarChartDashboard budgetList={budgetList} />
         </div>
 
-        {/* Right side: Budgets */}
-        <div className="bg-white rounded-xl shadow p-6 space-y-5">
+        {/* Expenses Table */}
+        <div className="bg-white rounded-xl shadow p-6 w-full">
+          <h2 className="font-semibold text-lg mb-4">Recent Expenses</h2>
+          {expensesList.length > 0 ? (
+            <ExpenseListTable
+              expensesList={expensesList}
+              refreshData={getAllExpenses}
+            />
+          ) : (
+            <div className="text-sm text-gray-500">No recent expenses to display.</div>
+          )}
+        </div>
+
+        {/* Budgets */}
+        <div className="bg-white rounded-xl shadow p-6 space-y-5 w-full">
           <h2 className="font-semibold text-lg">Latest Budgets</h2>
           {budgetList?.length > 0
             ? budgetList.map((budget, index) => (

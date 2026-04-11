@@ -14,7 +14,7 @@ function AddExpense({ budgetId, user, refreshData }) {
   const categorizeExpense = async (description) => {
     if (!description) {
       setCategory("Other");
-      return;
+      return "Other";
     }
     setCategorizing(true);
     try {
@@ -25,26 +25,23 @@ function AddExpense({ budgetId, user, refreshData }) {
       });
       if (res.ok) {
         const data = await res.json();
-        setCategory(data?.category?.trim() || "Other");
-      } else {
-        setCategory("Other");
+        const nextCategory = data?.category?.trim() || "Other";
+        setCategory(nextCategory);
+        return nextCategory;
       }
+      setCategory("Other");
+      return "Other";
     } catch (err) {
       console.error("Categorization failed", err);
       setCategory("Other");
+      return "Other";
     } finally {
       setCategorizing(false);
     }
   };
 
   const handleNameChange = (e) => {
-    const value = e.target.value;
-    setName(value);
-    if (value) {
-      categorizeExpense(value);
-    } else {
-      setCategory("Other");
-    }
+    setName(e.target.value);
   };
   /**
    * Used to Add New Expense
@@ -58,6 +55,7 @@ function AddExpense({ budgetId, user, refreshData }) {
 
     setLoading(true);
     try {
+      const nextCategory = await categorizeExpense(name);
       const res = await fetch("/api/expenses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,7 +63,7 @@ function AddExpense({ budgetId, user, refreshData }) {
           name,
           amount: parsedAmount,
           budgetId,
-          category: category || "Other",
+          category: nextCategory,
         }),
       });
       if (!res.ok) throw new Error(await res.text());
