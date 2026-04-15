@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import formatNumber from '@/utils/index';
 
 const CurrencyContext = createContext();
@@ -14,15 +14,12 @@ export const useCurrency = () => {
 };
 
 export const CurrencyProvider = ({ children }) => {
-  const [currency, setCurrency] = useState('USD');
-
-  useEffect(() => {
-    // Load currency preference from localStorage
-    const savedCurrency = localStorage.getItem('userCurrency');
-    if (savedCurrency) {
-      setCurrency(savedCurrency);
+  const [currency, setCurrency] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('userCurrency') || 'USD';
     }
-  }, []);
+    return 'USD';
+  });
 
   const updateCurrency = (newCurrency) => {
     setCurrency(newCurrency);

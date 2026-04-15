@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from "next/server";
 import { db } from "@/utils/dbConfig";
 import { Budgets, Expenses } from "@/utils/schema";
@@ -47,7 +49,8 @@ export async function POST(req: Request) {
     const createdBy = email || 'unknown';
     const result = await db
       .insert(Budgets)
-      .values({ name, amount, icon, createdBy } as any)
+      // @ts-expect-error Drizzle type inference issue with optional icon field
+      .values({ name, amount, icon: icon || null, createdBy })
       .returning({ id: Budgets.id });
     console.log("[budgets POST] insert result=", result);
     return NextResponse.json(result);
@@ -63,7 +66,7 @@ export async function PATCH(req: Request) {
     if (!id) {
       return NextResponse.json({ error: "Missing id" }, { status: 400 });
     }
-    const updateData: any = {};
+    const updateData: Record<string, string | null> = {};
     if (name !== undefined) updateData.name = name;
     if (amount !== undefined) updateData.amount = amount;
     if (icon !== undefined) updateData.icon = icon;

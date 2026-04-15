@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from "next/server";
 import { db } from "@/utils/dbConfig";
 import { Incomes, Expenses } from "@/utils/schema";
@@ -43,7 +45,8 @@ export async function POST(req: Request) {
     }
     const result = await db
       .insert(Incomes)
-      .values({ name, amount, icon, createdBy: email } as any)
+      // @ts-expect-error Drizzle type inference issue with optional icon field
+      .values({ name, amount, icon: icon || null, createdBy: email })
       .returning({ id: Incomes.id });
     return NextResponse.json(result);
   } catch (err) {

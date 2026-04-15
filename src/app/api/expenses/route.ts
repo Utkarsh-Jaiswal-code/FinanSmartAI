@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from "next/server";
 import { db } from "@/utils/dbConfig";
 import { Expenses, Budgets } from "@/utils/schema";
@@ -54,7 +56,7 @@ export async function POST(req: Request) {
         amount,
         budgetId: Number(budgetId),
         createdAt: new Date().toISOString(),
-        category: expenseCategory,
+        category: expenseCategory || null,
       } as any)
       .returning({ id: Expenses.id });
 
@@ -70,7 +72,7 @@ export async function PATCH(req: Request) {
     if (!id) {
       return NextResponse.json({ error: "Missing id" }, { status: 400 });
     }
-    const updateData: any = {};
+    const updateData: Record<string, string> = {};
     if (name !== undefined) updateData.name = name;
     if (amount !== undefined) updateData.amount = amount;
     const result = await db

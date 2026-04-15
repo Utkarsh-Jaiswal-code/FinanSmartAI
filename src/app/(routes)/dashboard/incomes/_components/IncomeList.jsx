@@ -7,20 +7,20 @@ import IncomeItem from "@/app/(routes)/dashboard/incomes/_components/IncomeItem"
 function IncomeList() {
   const [incomelist, setIncomelist] = useState([]);
   const { user } = useUser();
-  useEffect(() => {
-    user && getIncomelist();
-  }, [user]);
 
-  const getIncomelist = async () => {
-    if (!user?.primaryEmailAddress?.emailAddress) return;
-    const res = await fetch(
-      `/api/incomes?email=${encodeURIComponent(
-        user.primaryEmailAddress.emailAddress
-      )}`
-    );
-    const data = await res.json();
-    setIncomelist(data || []);
-  };
+  useEffect(() => {
+    const getIncomelist = async () => {
+      if (!user?.primaryEmailAddress?.emailAddress) return;
+      const res = await fetch(
+        `/api/incomes?email=${encodeURIComponent(
+          user.primaryEmailAddress.emailAddress
+        )}`
+      );
+      const data = await res.json();
+      setIncomelist(data || []);
+    };
+    if (user) getIncomelist();
+  }, [user]);
 
   return (
     <div className="mt-7">

@@ -10,6 +10,21 @@ import {
 } from "recharts";
 import { useCurrency } from "@/app/components/CurrencyProvider";
 
+// Custom tooltip component defined outside to avoid recreation on render
+const CustomTooltip = ({ active, payload, formatCurrency }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-3 rounded shadow-lg border border-gray-200">
+        <p className="font-semibold text-gray-800">{payload[0].name}</p>
+        <p className="text-blue-600 font-bold">
+          {formatCurrency(payload[0].value)}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 function ExpenseByCategoryChart({ expensesList }) {
   const { formatCurrency } = useCurrency();
 
@@ -56,21 +71,6 @@ function ExpenseByCategoryChart({ expensesList }) {
     );
   }
 
-  // Custom tooltip to show formatted currency
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 rounded shadow-lg border border-gray-200">
-          <p className="font-semibold text-gray-800">{payload[0].name}</p>
-          <p className="text-blue-600 font-bold">
-            {formatCurrency(payload[0].value)}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <div className="border rounded-xl p-5">
       <h2 className="font-bold text-lg mb-4">Expenses by Category</h2>
@@ -91,7 +91,7 @@ function ExpenseByCategoryChart({ expensesList }) {
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip formatCurrency={formatCurrency} />} />
           <Legend wrapperStyle={{ paddingTop: "20px" }} />
         </PieChart>
       </ResponsiveContainer>

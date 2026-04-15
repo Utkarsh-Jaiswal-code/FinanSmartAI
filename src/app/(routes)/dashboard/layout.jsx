@@ -11,10 +11,6 @@ function DashboardLayout({ children }) {
   const { user } = useUser();
   const router = useRouter();
 
-  useEffect(() => {
-    user && checkUserBudgets();
-  }, [user]);
-
   const checkUserBudgets = async () => {
     try {
       const email = user?.primaryEmailAddress?.emailAddress;
@@ -27,6 +23,10 @@ function DashboardLayout({ children }) {
       console.error("Error checking user budgets:", err);
     }
   };
+
+  useEffect(() => {
+    user && checkUserBudgets();
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-gray-50">
