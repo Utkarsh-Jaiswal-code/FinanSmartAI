@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import CardInfo from "@/app/(routes)/dashboard/_components/CardInfo";
 import BarChartDashboard from "@/app/(routes)/dashboard/_components/BarChartDashboard";
+import ExpenseByCategoryChart from "@/app/(routes)/dashboard/_components/ExpenseByCategoryChart";
 import BudgetItem from "@/app/(routes)/dashboard/budgets/_components/BudgetItem";
 import ExpenseListTable from "@/app/(routes)/dashboard/expenses/_components/ExpenseListTable";
 import CurrencySelector from "@/app/components/CurrencySelector";
@@ -91,10 +92,21 @@ function Dashboard() {
 
       {/* Main Column */}
       <div className="flex flex-col gap-6 mt-8 w-full">
-        {/* Chart */}
+        {/* Charts Container */}
         <div className="bg-white rounded-xl shadow p-6 w-full">
-          <h2 className="font-semibold text-lg mb-4">Spending Overview</h2>
-          <BarChartDashboard budgetList={budgetList} />
+          <h2 className="font-semibold text-2xl mb-6">Analytics</h2>
+          <div className="flex flex-col gap-8">
+            {/* Spending Overview Chart */}
+            <div>
+              <h3 className="font-semibold text-lg mb-4">Spending Overview</h3>
+              <BarChartDashboard budgetList={budgetList} />
+            </div>
+
+            {/* Expenses by Category Chart */}
+            <div>
+              <ExpenseByCategoryChart expensesList={expensesList} />
+            </div>
+          </div>
         </div>
 
         {/* Expenses Table */}

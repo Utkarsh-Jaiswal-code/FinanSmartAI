@@ -1,5 +1,4 @@
 import { UserButton } from "@clerk/nextjs";
-import { User } from "lucide-react";
 import React from "react";
 function DashboardHeader() {
     return (

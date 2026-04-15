@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 import { CurrencyProvider } from "@/app/components/CurrencyProvider";
 
 const geistSans = Geist({
@@ -35,7 +36,7 @@ export default function RootLayout({ children }) {
               FinanSmartAI
             </h1>
             <nav className="space-x-6 text-sm font-medium">
-              <a href="/" className="hover:text-primary transition-colors">Home</a>
+              <Link href="/" className="hover:text-primary transition-colors">Home</Link>
               <a href="#" className="hover:text-primary transition-colors">Services</a>
               <a href="/about" className="hover:text-primary transition-colors">About</a>
             </nav>

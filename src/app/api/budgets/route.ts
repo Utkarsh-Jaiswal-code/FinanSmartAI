@@ -6,7 +6,7 @@ import { desc, eq, getTableColumns, sql } from "drizzle-orm";
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    let email = url.searchParams.get("email");
+    const email = url.searchParams.get("email");
     if (!email) {
       console.log('[budgets GET] no email query param');
       // fallback to returning all budgets if email not provided

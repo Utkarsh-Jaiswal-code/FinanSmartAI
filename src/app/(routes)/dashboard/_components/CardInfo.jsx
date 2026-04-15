@@ -5,64 +5,56 @@ import {
 } from "lucide-react";
 
 import getFinancialAdvice from "@/utils/getFinancialAdvice";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCurrency } from "@/app/components/CurrencyProvider";
 function CardInfo({ budgetList, incomeList }) {
-    const [totalBudget, settotalBudget] = useState(0);
-    const [totalSpend, settotalSpend] = useState(0);
-    const [totalIncome, settotalIncome] = useState(0);
     const [financialAdvice, setfinancialAdvice] = useState("");
     const [forecastData, setForecastData] = useState(null);
+    const lastAdviceRequest = useRef({ totalBudget: null, totalIncome: null, totalSpend: null });
     const { formatCurrency } = useCurrency();
 
-    useEffect(() => {
-        if ((budgetList && budgetList.length > 0) || (incomeList && incomeList.length > 0)) {
-            CalculateCardInfo();
-        } else {
-            // reset when no data
-            settotalBudget(0);
-            settotalSpend(0);
-            settotalIncome(0);
-        }
+    const { totalBudget, totalSpend, totalIncome } = useMemo(() => {
+        const totalBudget = Array.isArray(budgetList)
+            ? budgetList.reduce((sum, item) => sum + Number(item?.amount || 0), 0)
+            : 0;
+
+        const totalSpend = Array.isArray(budgetList)
+            ? budgetList.reduce((sum, item) => sum + Number(item?.totalSpend || 0), 0)
+            : 0;
+
+        const totalIncome = Array.isArray(incomeList)
+            ? incomeList.reduce((sum, item) => sum + Number(item?.amount || 0), 0)
+            : 0;
+
+        return { totalBudget, totalSpend, totalIncome };
     }, [budgetList, incomeList]);
 
     useEffect(() => {
-        if (totalBudget > 0 || totalIncome > 0 || totalSpend > 0) {
-            const fetchFinancialAdvice = async () => {
-                try {
-                    const result = await getFinancialAdvice(totalBudget, totalIncome, totalSpend);
-                    setfinancialAdvice(result?.advice || "No financial advice available.");
-                    setForecastData(result?.forecast || null);
-                } catch (err) {
-                    console.error("Error fetching financial advice:", err);
-                }
-            };
-            fetchFinancialAdvice();
-        }
+        const shouldFetchAdvice =
+            totalBudget > 0 || totalIncome > 0 || totalSpend > 0;
+
+        const isDuplicateRequest =
+            lastAdviceRequest.current.totalBudget === totalBudget &&
+            lastAdviceRequest.current.totalIncome === totalIncome &&
+            lastAdviceRequest.current.totalSpend === totalSpend;
+
+        if (!shouldFetchAdvice || isDuplicateRequest) return;
+
+        lastAdviceRequest.current = { totalBudget, totalIncome, totalSpend };
+
+        const fetchFinancialAdvice = async () => {
+            try {
+                const result = await getFinancialAdvice(totalBudget, totalIncome, totalSpend);
+                setfinancialAdvice(result?.advice || "No financial advice available.");
+                setForecastData(result?.forecast || null);
+            } catch (err) {
+                console.error("Error fetching financial advice:", err);
+            }
+        };
+
+        fetchFinancialAdvice();
     }, [totalBudget, totalIncome, totalSpend]);
 
-    const CalculateCardInfo = () => {
-        let totalBudget_ = 0;
-        let totalSpend_ = 0;
-        let totalIncome_ = 0;
-
-        if (Array.isArray(budgetList)) {
-            budgetList.forEach((element) => {
-                totalBudget_ += Number(element?.amount || 0);
-                totalSpend_ += Number(element?.totalSpend || 0);
-            });
-        }
-
-        if (Array.isArray(incomeList)) {
-            incomeList.forEach((element) => {
-                totalIncome_ += Number(element?.amount || 0);
-            });
-        }
-
-        settotalBudget(totalBudget_);
-        settotalSpend(totalSpend_);
-        settotalIncome(totalIncome_);
-    };
     const hasBudgets = Array.isArray(budgetList) && budgetList.length > 0;
 
     return (
