@@ -28,5 +28,5 @@ FinanSmartAI is a full-stack AI-powered personal finance management system that 
 
 ## Live Demo
 
-Live Demo Link: finan-smart-ai.vercel.app
+[Live Demo Link: ](https://finan-smart-ai.vercel.app/)
 
