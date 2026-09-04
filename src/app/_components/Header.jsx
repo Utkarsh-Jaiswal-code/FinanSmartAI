@@ -45,9 +45,8 @@ function Header() {
 
             {/* When signed out */}
             <SignedOut>
-              {/* Keep Dashboard visible even when logged out (optional) */}
               <Button variant="outline" className="rounded-full" asChild>
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/sign-in?redirect_url=/dashboard">Dashboard</Link>
               </Button>
               <Button
                 className="rounded-full bg-gradient-to-r from-blue-600 to-emerald-500 text-white hover:opacity-90"
