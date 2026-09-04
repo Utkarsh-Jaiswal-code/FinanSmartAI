@@ -26,4 +26,7 @@ FinanSmartAI is a full-stack AI-powered personal finance management system that 
 6. PostgreSQL database using Drizzle ORM  
 7. Fully responsive & modern UI  
 
+## Live Demo
+
+Live Demo Link: [https://finan-smart-ai.vercel.app/](https://finan-smart-ai.vercel.app/)
 
